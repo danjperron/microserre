@@ -1,7 +1,9 @@
 # microserre
 Asservissement de serre intérieure en utilisant un esp32 avec Tasmota et le script Berry
 
-une vidéo youtube à propos du montage
+<img src="MicroserreBox.jpg" width="800">
+
+Une vidéo youtube à propos du montage
 
 https://www.youtube.com/watch?v=mvLWmBBGy5E
 
