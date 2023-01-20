@@ -14,7 +14,9 @@ les pièces que j'ai utilisé. Le tout est disponible sur amazon<br>
 <li>Barrina Lot de 4 lampes de croissance à DEL de 6 m,4 x 24 W</li>
 <li>Inkbird Relais SSD 25DA</li> 
 <li>Ventilateur de PC 12V</li>
-<li>IZOKEE I2C IIC 12864 128 x 64 pixels Écran LCD OLED Module SSD1306</li></ul>
+<li>IZOKEE I2C IIC 12864 128 x 64 pixels Écran LCD OLED Module SSD1306</li>
+<li>Hammond boîtier 1598j</li></ul>
+
  
 Et provenant magazin de rénovation
 <ul><li>Boîte électrique</li>
