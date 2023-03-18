@@ -88,6 +88,9 @@ class _PID
         elif self.keyIndex == 4
             #print Pid Kd
             text1 = string.format("[zs1f2y1]PID Kd"+textf,self.k_d)
+        elif self.keyIndex == 5
+            text1 = string.format("[zs1f1y1]IP:[x1y16]"+tasmota.wifi()['ip'])
+            text1 = text1 + string.format("[x1y32]MAC:[x1y48]"+tasmota.wifi()['mac'])
         else
             #print time and current temp
             text1 ="[zs1f2y1x22t]"
@@ -140,7 +143,7 @@ class _PID
         end
         if key == "T"
            self.keyIndex+=1
-           if self.keyIndex>4
+           if self.keyIndex>5
                self.keyIndex=0
            end
         else
