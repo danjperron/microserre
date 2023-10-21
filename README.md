@@ -3,6 +3,16 @@
 Asservissement de serre intérieure en utilisant un esp32 avec Tasmota et le script Berry<br>
 Micro-greenhouse control  using  esp32 on tasmota and berry script.
 
+<b>Update Version 2.0</b>
+<ul><li>Ajout d'une pompe pour la tour hydroponique</li>
+<li>Ajout d'une classe pour gérer l'écran OLED sous plusieurs classes</li>
+<li>Ajout de configuration dans le WEB GUI de tasmota.</li>
+<li>Tout les paramètres sont maintenant sauvegardés d'une façon permanente avec la classe persist</li>
+</ul>
+N.B. Il faut absolument utiliser tasmota  version 13 ou plus.
+ 
+
+
 <img src="MicroserreBox.jpg" height="300"><img src="Esp32SerreBox.jpg" height="300">
 
 
@@ -15,6 +25,11 @@ Youtube video about it.  ( they are in french!)
 Liens utile: (links)
 <ul><li>https://tasmota.github.io/docs/</li>
 <li>https://templates.blakadder.com/wemos_D1_Mini_ESP32.html</li></ul>
+
+Pour la tour Hydroponique
+<ul><li>https://www.youtube.com/watch?v=5VMlcasPe9M</li>
+<li>https://www.thingiverse.com/thing:3405964</li>
+</ul>
 
 Les pièces que j'ai utilisé. Le tout est disponible sur amazon (Part list)
 <ul><li>LEGOO Module relais 4 canaux DC 5 V pour arduino et Pi</li>

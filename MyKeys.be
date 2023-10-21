@@ -51,7 +51,7 @@ class keypad
 
    def every_50ms()
         var key
-   	for k: self.keys
+       for k: self.keys
             key = k.scan()
             if key != nil
                 self.keyReturned.push(key)
