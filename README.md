@@ -39,7 +39,6 @@ Liens utile: (links)
 Pour la tour Hydroponique<br>
 Hydroponic tower links<br>
 <ul><li>https://www.youtube.com/watch?v=5VMlcasPe9M</li>
-<li>https://www.thingiverse.com/thing:3405964</li>
 </ul>
 
 Les pièces que j'ai utilisé. Le tout est disponible sur amazon (Part list)
