@@ -6,11 +6,11 @@ import string
 class MyHydroMethods
 
   var PumpON
-  var PumpCounter
   var PumpOutput
   var sec
 
   def init()
+    self.PumpOutput=1
     if ! persist.has("TON")
        persist.TON= 5
     end
@@ -18,39 +18,56 @@ class MyHydroMethods
        persist.TOFF= 15
     end
     if ! persist.has("PumpEnable")
-       persist.PumpEnable=True
+       persist.PumpEnable="Enable"
     end
-    self.PumpON = persist.PumpEnable ? True : False
-    self.PumpCounter = 0
-    self.PumpOutput=1
-    self.sec=0
-    tasmota.set_power(self.PumpOutput,self.PumpON)
+    self.setPumpON(True)
     AllScreens.AddScreens(self,3)
     AllScreens.lcdON()
   end
 
+  def setPumpON(flag)
+     self.sec = flag ?  persist.TON * 60 : persist.TOFF * 60
+     if persist.PumpEnable == "OFF"
+       tasmota.set_power(self.PumpOutput,false)
+     elif persist.PumpEnable == "ON"
+       tasmota.set_power(self.PumpOutput,true)
+     else
+       persist.PumpEnable = "Enable"
+       self.PumpON = flag 
+       tasmota.set_power(self.PumpOutput,self.PumpON)
+     end
+  end
+
   def every_second()
-    if persist.PumpEnable
-      self.sec+=1
-      if self.sec >=60
-        self.sec=0
-        self.PumpCounter +=1
-        var pTarget= persist.TOFF
-        if self.PumpON
-          pTarget = persist.TON
-        end
-        if self.PumpCounter >= pTarget
-          self.PumpON=!self.PumpON
-          self.PumpCounter=0
-          tasmota.set_power(self.PumpOutput,self.PumpON)
-        end
+    var _target = (self.PumpON ? persist.TON : persist.TOFF) * 60
+    if persist.PumpEnable== "Enable"
+      if self.sec > _target
+         self.sec = _target
+      end   
+      self.sec-=1
+      if self.sec <= 0
+         self.setPumpON( !self.PumpON)
       end
-    else
-      self.PumpON=False
-      self.PumpCounter=0
-      tasmota.set_power(self.PumpOutput,self.PumpON)
     end
   end
+  
+
+    def web_sensor()
+        import string
+        var msg
+        var tsec = self.sec
+        if persist.PumpEnable == "Enable"
+          msg = string.format("{s}Pompe hydroponique %3s  sur minuteur.{m}%d:%02d{e}",self.PumpON ? "ON" : "OFF", tsec/60,tsec % 60)
+          tasmota.web_send_decimal(msg)
+        elif persist.PumpEnable == "OFF"
+          tasmota.web_send("{s}Pompe hydroponique toujours OFF{e}")
+        elif persist.PumpEnable == "ON"
+          tasmota.web_send("{s}Pompe hydroponique toujours ON{e}")
+        else
+          tasmota.web_send(string.format("{s}HydroPump mode unknown %s{e}",persist.PumpEnable))
+        end
+    end
+
 
     def RefreshLCD(idx)
         import string
@@ -65,7 +82,7 @@ class MyHydroMethods
               text1 = string.format("[zs1f1y1]Hydro Pompe OFF"+textn,persist.TOFF)
         else
               # if hydro pump Enable          
-              text1 = string.format("[zs1f1y1]Hydro Pompe ENABLE"+textE,persist.PumpEnable? "ON" : "OFF")
+              text1 = string.format("[zs1f1y1]Hydro Pompe ENABLE"+textE,persist.PumpEnable)
         end
         return text1
     end
@@ -75,9 +92,25 @@ class MyHydroMethods
        #HydroPumpEnable
        if idx<= 1
           if key == '+'
-              persist.PumpEnable=true
+              if persist.PumpEnable=="Enable"
+                  persist.PumpEnable="OFF"
+                  self.setPumpON(False)                  
+              elif persist.PumpEnable=="OFF"
+                  persist.PumpEnable="ON"
+                  self.setPumpON(True)                  
+              else 
+                  persist.PumpEnable="Enable"
+              end
           elif key == '-'
-              persist.PumpEnable=false
+              if persist.PumpEnable=="Enable"
+                  persist.PumpEnable="ON"
+                  self.setPumpON(True)                  
+              elif persist.PumpEnable=="ON"
+                  persist.PumpEnable="OFF"
+                  self.setPumpOn(False)
+              else
+                  persist.PumpEnable="Enable"
+              end
           end
         #HydroPumpTimeON
         elif idx ==2
@@ -123,13 +156,17 @@ def setTOFF(topic, idx, payload_s, payload_b)
 
 def setPompeEnable(topic, idx, payload_s, payload_b)
       if payload_s=="ON"
-         persist.PumpEnable=true
+         persist.PumpEnable="ON"
       elif payload_s=="OFF"
-         persist.PumpEnable=false
+         persist.PumpEnable="OFF"
       elif payload_s=="0"
-         persist.PumpEnable=false
+         persist.PumpEnable="OFF"
       elif payload_s=="1"
-         persist.PumpEnable=true
+         persist.PumpEnable="ON"
+      elif payload_s=="Enable"
+         persist.PumpEnable="Enable"
+      elif payload_s=="Auto"
+         persist.PumpEnable="Enable"
       end
       print("set Pump Enable:", persist.PumpEnable)
       persist.save()
@@ -144,4 +181,5 @@ if topic !=nil
   mqtt.subscribe("cmnd/"+topic+"/PompeTimeON", setTON)
   mqtt.subscribe("cmnd/"+topic+"/PompeTimeOFF", setTOFF)
 end
-      
+
+tasmota.cmd("WebButton2 Pompe") 
