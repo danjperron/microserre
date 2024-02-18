@@ -49,6 +49,12 @@ class myScreenClass
     end
     end
     
+    def First()
+        self.Idx =0
+        self.RefreshLCD()
+    end
+
+
     def AddScreens(objet,nbScreen)
         for i: 1 .. nbScreen
     self.List.push(screenInfo(objet,i))

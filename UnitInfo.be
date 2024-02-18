@@ -18,10 +18,12 @@ class UnitInfo
         elif idx == 2 #Unit Name and MQTT Topic
            text1 = string.format("[zs1f1y1]ID:[x1y16]"+tasmota.cmd('status')['Status']['DeviceName'])
            text1 = text1 + string.format("[x1y32]MQTT Topic:[x1y48]"+tasmota.cmd('status')['Status']['Topic'])
-        elif idx == 3 #Save Settings
+        elif idx == 3 #set wifi manager
+           text1 = "[zs1f1y1]Set Wifi Manager + ou -"
+        elif idx == 4 #Save Settings
            self.saveFlag=false
            text1 = "[zs1f2x4y1]Sauver[x1y24]Utilise[x1y48] + ou -"
-        elif idx == 4 #Save Settings
+        elif idx == 5 #Save Settings
            if self.saveFlag
              text1 = "[Ci0Bi1zs1f0x20y24]C'est sauv~82![Ci1Bi0]"
            else
@@ -33,7 +35,12 @@ class UnitInfo
        
        
     def KeyPress(key,idx)
-       if(idx ==3 )
+       if idx == 3  # wifi manager
+          if (key == '+') || (key == '-')
+              tasmota.cmd("WifiConfig 2")
+              AllScreens.First()
+          end
+       elif(idx ==4 )
            if (key == '+') || (key == '-')
                persist.save()
                self.saveFlag=true

@@ -17,7 +17,7 @@ class HydroCycle_UI
        persist.TOFF= 15
      end
      if ! persist.has("PumpEnable")
-       persist.PumpEnable=True
+       persist.PumpEnable="Enable"
      end
   end
   
@@ -38,9 +38,12 @@ class HydroCycle_UI
       webserver.content_send("<fieldset><style>.bdis{background:#888;}.bdis:hover{background:#888;}</style>")
       webserver.content_send(format("<legend><b title='HydroCycle'>Configuration pompe hydroponique</b></legend>"))
       webserver.content_send("<p><form id=HydroCycle_ui style='display: block;' action='/HydroCycle_ui' method='post'>")
-      webserver.content_send(format("<table style='width:100%%'>"))
-      webserver.content_send("<tr><td style='width:300px'><b>Activation du cycle de la pompe</b></td>")
-      webserver.content_send(format("<td style='width:100px'><input type='checkbox' name='PumpEnable'%s></td></tr>", persist.PumpEnable ? " checked" : ""))
+      webserver.content_send("<br><center><b>Activation du cycle de la pompe</b><br><br>")
+      webserver.content_send(format("<input type='radio' name='PumpEnable' value='Enable' %s><label for='Enable'>Minuteur</label>", persist.PumpEnable=="Enable" ? " checked" : ""))
+      webserver.content_send(format("<input type='radio' name='PumpEnable' value='OFF' %s><label for='OFF'>OFF</label>", persist.PumpEnable== "OFF" ? " checked" : ""))
+      webserver.content_send(format("<input type='radio' name='PumpEnable' value='ON' %s><label for='ON'>ON</label>", persist.PumpEnable=="ON" ? " checked" : ""))
+      webserver.content_send("</center><br>")
+      webserver.content_send("<table style='width:100%%'>")
       webserver.content_send("<tr><td style='width:300px'><b>Durée de la pompe ON (min)</b></td>")
       webserver.content_send(format("<td style='width:100px'><input type='number' min='1' max='60' name='TON' value='%i'></td></tr>", persist.TON))
       webserver.content_send("<tr><td style='width:300px'><b>Durée de la pompe OFF (min)</b></td>")
@@ -63,7 +66,7 @@ class HydroCycle_UI
           # read arguments
           persist.TON = int(webserver.arg("TON"))
           persist.TOFF = int(webserver.arg("TOFF"))
-          persist.PumpEnable = webserver.arg("PumpEnable") == 'on'
+          hydro.setEnable(webserver.arg("PumpEnable"))
           persist.save()
           webserver.redirect("/cn?")
         end
