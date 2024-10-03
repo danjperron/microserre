@@ -25,7 +25,7 @@ class UnitInfo
            text1 = "[zs1f2x4y1]Sauver[x1y24]Utilise[x1y48] + ou -"
         elif idx == 5 #Save Settings
            if self.saveFlag
-             text1 = "[Ci0Bi1zs1f0x20y24]C'est sauv~82![Ci1Bi0]"
+             text1 = "[C0B1zs1f0x20y24]C'est sauv~82![C1B0]"
            else
              AllScreens.Next();
            end

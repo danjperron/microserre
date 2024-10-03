@@ -27,7 +27,11 @@ Modules
 
 
 Vidéos youtube à propos du montage<br>
-Youtube video about it.  ( they are in french!)
+Youtube video about it.  ( they are in french!)<br><br>
+*** update pour tasmota 14+ utiliser la version écran universel<br>
+&nbsp;&nbsp;&nbsp;For tasmota 14+  use the universal display<br>
+&nbsp;&nbsp;&nbsp;https://tasmota.github.io/docs/Universal-Display-Driver/<br>
+
 <ul><li>Partie 1 https://www.youtube.com/watch?v=mvLWmBBGy5E</li>
 <li>Partie2 https://www.youtube.com/watch?v=h-Z3mEz7BCM</li></ul>
 

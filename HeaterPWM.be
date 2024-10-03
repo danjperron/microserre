@@ -84,7 +84,7 @@ class _PID
             text1 = string.format("[zs1f2y1]PID Kd"+textf,persist.k_d)
         else
             #print time and current temp
-            text1 ="[Ci1Bi0zs1f2y1x22t]"
+            text1 ="[C1B0zs1f2y1x22t]"
             if self.temperatureValid
                text1+=string.format(textf+circle+textpid,
                       self.temperature,self.pid_PWM.value)
