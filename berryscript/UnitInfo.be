@@ -10,17 +10,10 @@ class UnitInfo
 
     def RefreshLCD(idx)
         import string  
-        var text1="" 
-        var text2="";  
+        var text1=""   
         var textVersion= string.format("[x64]Ver.%2.1f",Version)
         if idx == 1 #mac address
-           text1 = string.format("[zs1f1y1]IP:"+textVersion+"[x1y16]")
-           try
-               text2=tasmota.wifi()['ip']
-           except ..
-               text2=""
-           end
-           text1 = text1 + text2
+           text1 = string.format("[zs1f1y1]IP:"+textVersion+"[x1y16]"+tasmota.wifi()['ip'])
            text1 = text1 + string.format("[x1y32]MAC:[x1y48]"+tasmota.wifi()['mac'])
         elif idx == 2 #Unit Name and MQTT Topic
            text1 = string.format("[zs1f1y1]ID:[x1y16]"+tasmota.cmd('status')['Status']['DeviceName'])
@@ -49,7 +42,6 @@ class UnitInfo
           end
        elif(idx ==4 )
            if (key == '+') || (key == '-')
-               persist.dirty()
                persist.save()
                self.saveFlag=true
                AllScreens.Next()
@@ -59,3 +51,5 @@ class UnitInfo
  
 end
    
+unitinfo = UnitInfo()
+tasmota.add_driver(unitinfo)

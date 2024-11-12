@@ -3,6 +3,13 @@
 Asservissement de serre intérieure en utilisant un esp32 avec Tasmota et le script Berry<br>
 Micro-greenhouse control  using  esp32 on tasmota and berry script.
 
+
+<b>Update Version 2.1  nov 2024</b>
+<ul><li>simplification des modules pour asservir deux serres à la fois</li>
+<li>  Ajout de "main.be" comme module principal </li>
+</ul>
+
+<br>
 <b>Update Version 2.0</b>
 <ul><li>Ajout d'une pompe pour la tour hydroponique<br>Hydroponic Tower pump add-on</li>
 <li>Ajout d'une classe pour gérer l'écran OLED sous plusieurs classes<br>Class AllScreens to deal with multiple modules</li>

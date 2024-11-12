@@ -24,23 +24,18 @@ class myScreenClass
         self.lcdOnTime=0  
         self.lcdOnTimeMax=30
         self.lcdON()  
-        tasmota.cmd("displayText [O]")
-   end
+    end
    
     def RefreshLCD()
-        print("Refresh LCD :",self.Idx)
         if self.Idx < 0
             self.Idx=0
         end
         if self.Idx>= self.List.size()
             self.Idx=0
         end
-        if self.lcdFlag
-            if self.Idx<self.List.size()
-                var t =self.List[self.Idx].Objet.RefreshLCD(self.List[self.Idx].Idx)
-                tasmota.cmd("displayText "+t)
-                print("tasmota display :",t)
-            end
+        if self.Idx<self.List.size()
+             var t =self.List[self.Idx].Objet.RefreshLCD(self.List[self.Idx].Idx)
+            tasmota.cmd("displayText "+t)
         end
     end
     
@@ -73,9 +68,7 @@ class myScreenClass
         end
     end
 
-
-
- def lcdON()
+    def lcdON()
         tasmota.cmd("displaydimmer 1")
         self.lcdOnTime=0
         self.lcdFlag=true
@@ -88,8 +81,6 @@ class myScreenClass
         self.RefreshLCD()
         self.lcdOnTime=0
     end
-
-     
 
     def every_second()
         if self.lcdFlag
@@ -118,7 +109,6 @@ class myScreenClass
         end
 
         if key == "T"
-           tasmota.cmd("displaytext [O]")  
            self.Next()
         elif key == "-"
            self.KeyPress('-')

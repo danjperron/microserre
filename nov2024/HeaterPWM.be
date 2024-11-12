@@ -17,8 +17,8 @@ class _PID
     var timer
     var temperature
     var temperatureValid
-#    var analog1
-#    var analog2
+    var analog1
+    var analog2
     var pid_PWM
     var label
     var sensorId 
@@ -40,16 +40,16 @@ class _PID
         var textHeater= "[C1B0zs1f2y1x1]"+self.label
         if idx == 2
             #print target
-            text1 = textHeater+string.format("[s1f2y24]Cible"+textf2+circle2,persist.heaters[self.label]["target"])
+            text1 = textHeater+string.format("[s1f2y24]Cible"+textf2+circle2,persist.heaters[self.label].target)
         elif idx == 3
             #print Pid Kp
-            text1 = textHeater+string.format("[s1f2y24]PID Kp"+textf2,persist.heaters[self.label]["k_p"])
+            text1 = textHeater+string.format("[s1f2y24]PID Kp"+textf2,persist.heaters[self.label].k_p)
         elif idx == 4
             #print Pid Ki
-            text1 = textHeater+string.format("[s1f2y24]PID Ki"+textf2,persist.heaters[self.label]["k_i"])
+            text1 = textHeater+string.format("[s1f2y24]PID Ki"+textf2,persist.heaters[self.label].k_i)
         elif idx == 5
             #print Pid Kd
-            text1 = textHeater+string.format("[s1f2y24]PID Kd"+textf2,persist.heaters[self.label]["k_d"])
+            text1 = textHeater+string.format("[s1f2y24]PID Kd"+textf2,persist.heaters[self.label].k_d)
         else
             #print time and current temp
             #text1 ="[C1B0zs1f2y1x22t]"
@@ -80,30 +80,30 @@ class _PID
         # Target
         elif idx ==2
            if key == '+'
-               persist.heaters[self.label]["target"] +=0.5
+               persist.heaters[self.label].target +=0.5
            elif key == '-'
-               persist.heaters[self.label]["target"] -=0.5
+               persist.heaters[self.label].target -=0.5
            end
         # Kp
         elif idx == 3
            if key == '+'
-               persist.heaters[self.label]["k_p"] +=0.1
+               persist.heaters[self.label].k_p +=0.1
            elif key == '-'
-               persist.heaters[self.label]["k_p"] -=0.1
+               persist.heaters[self.label].k_p -=0.1
            end
         #Ki
         elif idx == 4
            if key == '+'
-               persist.heaters[self.label]["k_i"]+=0.1
+               persist.heaters[self.label].k_i+=0.1
            elif key == '-'
-               persist.heaters[self.label]["k_i"]-=0.1
+               persist.heaters[self.label].k_i-=0.1
            end
         # Kd
         elif idx == 5
            if key == '+'
-               persist.heaters[self.label]["k_d"] +=0.1
+               persist.heaters[self.label].k_d +=0.1
            elif key == '-'
-               persist.heaters[self.label]["k_d"] -=0.1
+               persist.heaters[self.label].k_d -=0.1
            end
 
         end
@@ -111,21 +111,21 @@ class _PID
 
     def setTarget(topic, idx, payload_s, payload_b)
       print(self.label+" set Target :", payload_s)
-      persist.heaters[self.label]["target"]= real(payload_s)
+      persist.heaters[self.label].target= real(payload_s)
       persist.save()
       return true
     end
 	
     def setKp(topic, idx, payload_s, payload_b)
       print(self.label+" set Kp :", payload_s)
-      persist.heaters[self.label]["k_p"]= real(payload_s)
+      persist.heaters[self.label].k_p= real(payload_s)
       persist.save()
       return true
     end
 
     def setKi(topic, idx, payload_s, payload_b)
       print(self.label+" set Ki :", payload_s)
-      persist.heaters[self.label]["k_i"]= real(payload_s)
+      persist.heaters[self.label].k_i= real(payload_s)
       persist.save()
       return true
     end
@@ -133,7 +133,7 @@ class _PID
 
     def setKd(topic, idx, payload_s, payload_b)
       print(self.label+" set Kd :", payload_s)
-      persist.heaters[self.label]["k_d"]= real(payload_s)
+      persist.heaters[self.label].k_d= real(payload_s)
       persist.save()
       return true
     end
@@ -149,7 +149,7 @@ class _PID
         end
            
         if !persist.heaters.contains(self.label)
-            persist.heaters[self.label]={}
+            persist.heaters={self.label:{}}
         end
            
         if !persist.heaters[self.label].has("k_p")
@@ -170,35 +170,26 @@ class _PID
 
         persist.dirty()
         persist.save()
+          print("persist save")
+          print("target",persist.heaters[self.label])
      
-        self.previous = persist.heaters[self.label]["target"]
+        self.previous = persist.heaters[self.label].target
         self.temperatureValid = false
-        self.temperature = persist.heaters[self.label]["target"]
-#        self.analog1 = 0
-#        self.analog2 = 0
+        self.temperature = persist.heaters[self.label].target
+        print("target set")
+        self.analog1 = 0
+        self.analog2 = 0
         self.sum_i = 0.0
         self.timer=25
         tasmota.set_power(internal_fan,true)
         AllScreens.AddScreens(self,5)
         AllScreens.lcdON()
-        if topic != nil
-           def Tg(topic, idx, payload_s, payload_b)
-           return self.setTarget(topic,idx,payload_s,payload_b)
-           end
-           def Kp(topic, idx, payload_s, payload_b)
-           return self.setKp(topic,idx,payload_s,payload_b)
-           end
-           def Ki(topic, idx, payload_s, payload_b)
-           return self.setKi(topic,idx,payload_s,payload_b)
-           end
-           def Kd(topic, idx, payload_s, payload_b)
-           return self.setKd(topic,idx,payload_s,payload_b)
-           end
-           mqtt.subscribe("cmnd/"+topic+"/"+label+"/TARGET",Tg)
-           mqtt.subscribe("cmnd/"+topic+"/"+label+"/Kp", Kp)
-           mqtt.subscribe("cmnd/"+topic+"/"+label+"/Ki", Ki)
-           mqtt.subscribe("cmnd/"+topic+"/"+label+"/Kd", Kd)
-        end
+#        if topic != nil
+#           mqtt.subscribe("cmnd/"+topic+"/"+label+"/TARGET", self.setTarget)
+#           mqtt.subscribe("cmnd/"+topic+"/"+label+"/Kp", self.setKp)
+#           mqtt.subscribe("cmnd/"+topic+"/"+label+"/Ki", self.setKi)
+#           mqtt.subscribe("cmnd/"+topic+"/"+label+"/Kd", self.setKd)
+#        end
     end 
 
 
@@ -236,29 +227,29 @@ class _PID
              self.temperatureValid=false
              end
         end
-#        value = self.extractItem(js,'ANALOG','A1')
-#        if value != nil
-#             self.analog1=int(value)          
-#             if topic != nil
-#             mqtt.publish("stat/"+topic+"/ANALOG1",str(self.analog1))
-#             end
-#        end
+        value = self.extractItem(js,'ANALOG','A1')
+        if value != nil
+             self.analog1=int(value)          
+             if topic != nil
+             mqtt.publish("stat/"+topic+"/ANALOG1",str(self.analog1))
+             end
+        end
      
-#        value = self.extractItem(js,'ANALOG','A2')
-#        if value != nil
-#             self.analog2=int(value)          
-#             if topic != nil
-#             mqtt.publish("stat/"+topic+"/ANALOG2",str(self.analog2))
-#             end
-#        end
+        value = self.extractItem(js,'ANALOG','A2')
+        if value != nil
+             self.analog2=int(value)          
+             if topic != nil
+             mqtt.publish("stat/"+topic+"/ANALOG2",str(self.analog2))
+             end
+        end
     end
 
 
     def web_sensor()
         import string
 #        var msg = string.format("{s}PID {m}%.0f %%</p>{e}",self.pid_PWM.value)
-#        msg += string.format("{s}Cible {m}%.1f °C{e}", persist.heaters[self.label]["target"])
-        var msg = string.format("    Cible=%0.1f °C    PID {m}%.0f %%{e}",persist.heaters[self.label]["target"],self.pid_PWM.value)
+#        msg += string.format("{s}Cible {m}%.1f °C{e}", persist.heaters[self.label].target)
+        var msg = string.format("    Cible=%0.1f °C    PID {m}%.0f %%{e}",persist.heaters[self.label].target,self.pid_PWM.value)
         tasmota.web_send_decimal("{s}"+self.label+" "+msg)
     end
 
@@ -268,16 +259,16 @@ class _PID
            return
         end
 
-        self.sum_i = self.sum_i + (persist.heaters[self.label]["k_i"]  * (persist.heaters[self.label]["target"] - value))
+        self.sum_i = self.sum_i + (persist.heaters[self.label].k_i  * (persist.heaters[self.label].target - value))
         if self.sum_i > self.pid_PWM.max
             self.sum_i = self.pid_PWM.max
         end
         if self.sum_i < 0.0
            self.sum_i =0.0
         end
-        PID_OUT = persist.heaters[self.label]["k_p"] * (persist.heaters[self.label]["target"] - value)
+        PID_OUT = persist.heaters[self.label].k_p * (persist.heaters[self.label].target - value)
         PID_OUT += self.sum_i          
-        PID_OUT += persist.heaters[self.label]["k_d"] * (self.previous - value)
+        PID_OUT += persist.heaters[self.label].k_d * (self.previous - value)
         self.previous = value
         if PID_OUT < 0.0
             PID_OUT = 0.0
@@ -287,10 +278,7 @@ class _PID
         end
         if topic != nil
             mqtt.publish("stat/"+topic+"/"+self.label+"/PID",str(PID_OUT))
-            mqtt.publish("stat/"+topic+"/"+self.label+"/TARGET",str(persist.heaters[self.label]["target"]))
-            mqtt.publish("stat/"+topic+"/"+self.label+"/Kp",str(persist.heaters[self.label]["k_p"]))
-            mqtt.publish("stat/"+topic+"/"+self.label+"/Ki",str(persist.heaters[self.label]["k_i"]))
-            mqtt.publish("stat/"+topic+"/"+self.label+"/Kd",str(persist.heaters[self.label]["k_d"]))
+            mqtt.publish("stat/"+topic+"/"+self.label+"/TARGET",str(persist.heaters[self.label].target))
         end
         self.pid_PWM.set(PID_OUT)
    
@@ -305,10 +293,10 @@ class _PID
             self.extractSensors()
             self.setPID(self.temperature)
            #is temp too high ? start external fan
-            if self.temperature > (persist.heaters[self.label]["target"] + 1.0)
+            if self.temperature > (persist.heaters[self.label].target + 1.0)
                  print("ext fan on")
                 tasmota.set_power(external_fan,true)
-            elif self.temperature <= persist.heaters[self.label]["target"]
+            elif self.temperature <= persist.heaters[self.label].target
                 print("ext fan off")
                 tasmota.set_power(external_fan,false)
             end
