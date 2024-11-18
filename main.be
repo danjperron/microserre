@@ -12,7 +12,8 @@ tasmota.cmd("WebButton9 LCD")
 var Pompes=[]
 var Chauffages=[]
 
-ExempleNbSerre =2 
+# Nombre de serre  1 ou 2
+ExempleNbSerre =1 
 
 if ExempleNbSerre == 2
     #deux serres exemple
