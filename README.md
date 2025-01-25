@@ -2,7 +2,7 @@
 
 Asservissement de serre intérieure en utilisant un esp32 avec Tasmota et le script Berry<br>
 Micro-greenhouse control  using  esp32 on tasmota and berry script.
-
+<br><img src="MicroserreTomate.jpg" height="480"><br>
 
 <b>Update Version 2.1  nov 2024</b>
 <ul><li>simplification des modules pour asservir deux serres à la fois</li>
@@ -30,7 +30,7 @@ Modules
 <br>
 
 
-<img src="MicroserreBox.jpg" height="300"><img src="Esp32SerreBox.jpg" height="300">
+<img src="Esp32SerreBox.jpg" height="300">
 
 
 Vidéos youtube à propos du montage<br>
